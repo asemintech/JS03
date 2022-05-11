@@ -1,14 +1,14 @@
-function myFilter(collection, callback) {
-    const result = [];
+Array.prototype.myFilter = function(fn) {
+    const filtered = [];
 
-    for (const item of collection) {
-        if (callback(item)) {
-            result.push(item);
+    for (let i = 0; i < this.length; i++) {
+        if (fn(this[i], i, this)) {
+            filtered.push(this[i]);
         }
     }
 
-    return result;
-}
+    return filtered;
+};
 
 function createDebounceFunction(func, wait, immediate) {
     let timeout;
