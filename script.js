@@ -1,14 +1,27 @@
-Array.prototype.myFilter = function(fn) {
-    const filtered = [];
+Array.prototype.myFilter = function(callback, thisArg) {
+    const context = thisArg || this;
+    const result = [];
 
-    for (let i = 0; i < this.length; i++) {
-        if (fn(this[i], i, this)) {
-            filtered.push(this[i]);
+    if (typeof context === 'undefined' || typeof context === 'null') {
+        throw new Error('Cannot iterate over undefined or null.');
+    }
+
+    if (typeof callback !== 'function') {
+        throw new Error('Callback is not a function.');
+    }
+
+    for (let i = 0; i < context.length; i++) {
+        if (i in context) {
+            const current = this[i];
+
+            if (callback.call(context, current, i)) {
+                result.push(current);
+            }
         }
     }
 
-    return filtered;
-};
+    return result;
+}
 
 function createDebounceFunction(func, wait, immediate) {
     let timeout;
